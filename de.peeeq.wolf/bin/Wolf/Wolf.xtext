@@ -1,0 +1,75 @@
+grammar de.peeeq.wolf.Wolf with org.eclipse.xtext.xbase.Xbase
+
+import "http://www.eclipse.org/xtext/xbase/Xbase"
+generate wolf "http://www.Wolf"
+
+Model:
+	'package' name=QualifiedName	
+	importSection=XImportSection?
+	specifications+=Specification*;
+
+Import:
+	'import' (importedNamespace=QualifiedName | importedNamespace=QualifiedNameWithWildcard)
+;
+
+Specification:
+	  AstSpec
+	| GrammarSpec
+	| ScannerSpec
+	| AspectSpec
+;
+
+
+AstSpec:
+	'ast' '{' 
+		elements+=AstElement*
+		'}'
+;
+
+AstElement:
+	  Constructor
+	| SumType
+	| ListType	
+;
+
+ListType:
+	name=ID '*' elementType=JvmTypeReference
+;
+
+SumType:
+	name=ID '=' (elements+=SumTypePart ('|' elements+=SumTypePart)*)
+;
+
+SumTypePart:
+	  constr=Constructor 
+	| ref=JvmTypeReference
+;
+
+Constructor:
+	name=ID '(' (params+=ConstructorParam (',' params+=ConstructorParam)*)?')'
+;
+
+ConstructorParam:
+	isReference?='&'? type=JvmTypeReference name=ID
+;
+	
+	
+	
+AspectSpec:
+	AttributeDef
+;
+
+AttributeDef:
+	'attr' receiver=[Constructor] '.' name=ID '(' (params+=FullJvmFormalParameter (',' params+=FullJvmFormalParameter)*)?')' 'returns' returnType=JvmTypeReference
+		body=XExpression
+	
+;
+
+ScannerSpec:
+	'todo2'
+;
+
+GrammarSpec:
+	'todo3'
+;
+

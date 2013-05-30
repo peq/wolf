@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+*/src-gen/*
+*/xtend-gen/*
+*.xml_gen
